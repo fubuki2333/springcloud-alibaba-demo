@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClassName:PaymentController
@@ -58,6 +59,11 @@ public class PaymentController {
         }
     }
 
+    @GetMapping(value = "/payment/lb")
+    public String getPaymentLB(){
+        return serverPort;
+    }
+
     @GetMapping(value = "/payment/discovery")
     public Object discovery(){
         List<String> services = discoveryClient.getServices();
@@ -71,5 +77,15 @@ public class PaymentController {
         }
 
         return this.discoveryClient;
+    }
+
+    @GetMapping(value = "/payment/feign/timeout")
+    public String paymentFeignTimeOut(){
+        try{
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+        return serverPort;
     }
 }
